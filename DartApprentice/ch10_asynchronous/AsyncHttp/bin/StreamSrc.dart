@@ -1,21 +1,14 @@
 import 'dart:io';
-import 'dart:async';
+import 'dart:convert';
 
 Future<void> main() async {
 
-  final file = File('assets/lorem_long.txt');
+  final file = File('assets/lorem.txt');
   final stream = file.openRead();
-  StreamSubscription<List<int>>? subscription;
-  subscription = stream.listen(
-    (data){
-      print(data.length);
-      subscription?.cancel();
-    },
-    cancelOnError: true,
-    onDone: () {
-      print("All done!");
-    }
-  );
+
+  await for (var data in stream.transform(utf8.decoder)){
+       print(data);
+  }
 }   
     
   
