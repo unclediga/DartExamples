@@ -1,15 +1,10 @@
 import 'dart:io';
 
-void main() {
+Future<void> main() async {
   final file = File('assets/lorem_long.txt');
   final stream = file.openRead();
-  stream.listen(
-              (data) 
-                 {print(data.length);},
-               onError: (error)
-                 {print(error);},
-               onDone: ()
-                 {print('All done');}
-  );
+  await for (var data in stream) {
+     print(data.length);
+  }
 }
   
