@@ -1,16 +1,21 @@
 import 'dart:io';
+import 'dart:async';
 
 Future<void> main() async {
-  try{
-    final file = File('assets/lorem_long.txt');
-    final stream = file.openRead();
-    await for (var data in stream) {
-       print(data.length);
+
+  final file = File('assets/lorem_long.txt');
+  final stream = file.openRead();
+  StreamSubscription<List<int>>? subscription;
+  subscription = stream.listen(
+    (data){
+      print(data.length);
+      subscription?.cancel();
+    },
+    cancelOnError: true,
+    onDone: () {
+      print("All done!");
     }
-  } on Exception catch(error){
-    print(error);
-  } finally {
-    print("All done!");     
-  }
-}
+  );
+}   
+    
   
