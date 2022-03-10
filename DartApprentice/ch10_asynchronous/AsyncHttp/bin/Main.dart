@@ -55,11 +55,11 @@ Future<void> main() async {
     } else {
       throw HttpException('$statusCode');
     }
-  } on SocketException catch (error) {
+  } on SocketException catch (error) {  
     print(error);
-  } on HttpException catch (error) {
+  } on HttpException catch (error) {    //wrong address
     print(error);
-  } on FormatException catch (error) {
+  } on FormatException catch (error) {  //wrong json string
     print(error);
   }
 }
