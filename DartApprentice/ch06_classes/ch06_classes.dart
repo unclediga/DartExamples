@@ -1,3 +1,4 @@
+//       C O N S T R U C T O R 
 void main(){
   
 
@@ -30,6 +31,24 @@ void main(){
 
   user = User4.anonymous();
   print("User4 anonymous is $user");    
+
+  // working in mode : dart --enable-asserts *.dart
+  user = User5(id:-1, name:'');
+  print("User5 anonymous is $user");    
+
+
+  user = User6(id:100, name:'const1');
+  const user2 = User6(id:200, name:'const2');
+
+
+  print("User6  is $user");    
+  print("User6  is $user2");    
+
+  
+  final Map<String,Object> m = {"id":100,"name" : "User7" };
+  user = User7.fromJson(m);
+  print("User7  is $user");    
+
 }
 
 
@@ -169,7 +188,7 @@ class User4{
   String _name;
   int _id;
 
-  
+  //                                |  <-  initializer list ->  |
   User4({id = 0, name = 'anonymous'}) : _id = id, _name = name;
 
   // Named constructor
@@ -182,6 +201,83 @@ class User4{
   }
 
 }
+
+// Checking for errors
+
+class User5{
+
+  String _name;
+  int _id;
+
+                                
+// working in debug-mode or cmd: dart --enable-asserts *.dart
+  User5({id = 0, name = 'anonymous'}) : 
+    assert(id >= 0),
+    assert(name.isNotEmpty),
+    _id = id, _name = name;
+
+
+  @override
+  String toString(){
+    return "User [$_id : $_name]";
+  }
+
+}
+
+
+// immutable 
+
+class User6{
+
+  final String _name;
+  final int _id;
+
+                                
+//  Error: Cannot invoke a non-'const' constructor where a const expression is expected.
+//  Try using a constructor or factory that is 'const'.
+//       const user2 = User6(id:200, name:'const2');
+//                     ^^^^^
+//  User6({id = 0, name = 'anonymous'}) : .....
+const  User6({id = 0, name = 'anonymous'}) : 
+    _id = id, _name = name;
+
+
+  @override
+  String toString(){
+    return "User [$_id : $_name]";
+  }
+
+}
+
+// Factory constructors
+
+class User7{
+
+  final String _name;
+  final int _id;
+
+                                
+  User7({id = 0, name = 'anonymous'}) : 
+    _id = id, _name = name;
+
+  factory User7.fromJson(Map<String,Object> json) {
+    final userId = json["id"] as int;
+    final userName = json["name"] as String;
+    return User7(id:userId, name:userName);
+  }
+
+
+  @override
+  String toString(){
+    return "User [$_id : $_name]";
+  }
+
+
+
+
+}
+
+
 
 class Address{
   var id = '';
