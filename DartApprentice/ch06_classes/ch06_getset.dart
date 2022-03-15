@@ -204,5 +204,3 @@ class MySingleton{
   MySingleton._();
   static final instance = MySingleton._();
 }
-
-
