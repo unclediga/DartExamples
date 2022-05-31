@@ -15,14 +15,25 @@ Stream<double> expensesFromList(){
 		.transform(const LineSplitter())
                 .map((d) => double.tryParse(d));	
 */
-  return Stream.fromIterable(List.of([1,2,3,4]));
+  List<double> list = List.of([1,2,3,4]);
+  return Stream.fromIterable(list);
 
 }
 
 
+Stream<String> fromUri() async*{
+
+  final client = http.Client();
+  final resp_ya = await client.get(Uri.parse("https://httpbin.org/xml"));
+  for (final String v in LineSplitter().convert(resp_ya.body)) {
+    yield v;
+  }    
+  client.close();
+}
+
 
 Stream<double> expensesFromUri() async*{
-  
+
   final client = http.Client();
   final resp = await client.get(Uri.parse("https://raw.githubusercontent.com/dzolotov/flutter-linux/main/expenses.csv"));
   
@@ -32,14 +43,21 @@ Stream<double> expensesFromUri() async*{
 
   for (final double v in LineSplitter().convert(resp.body).map((l) => (double.tryParse(l) ?? 0.0))) {
     yield v;
-  };    
-//  client.close();
+  }    
+  client.close();
 }
 
 void main(){
 
-  print("Test Expenses from List:");
+  print("Test HTTBIN.ORG:");
+  print("response body is : ------------------------");
+  (fromUri()).listen( (a) => print(a) );
+  print("-------------------------------------------");
 
+
+
+  print("Test Expenses from List:");
+  
   (expensesFromList()).listen((a){
      print("exp:$a");
   });
